@@ -1,0 +1,80 @@
+[gd_scene load_steps=4 format=2]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node2D
+
+const PLAYER_FACTORY = preload(\"res://Scenes/GameLogic/Bar.tscn\")
+
+onready var player1Pos : Position2D = $Player1
+onready var player2Pos : Position2D = $Player2
+
+func _ready():
+	print(player2Pos)
+	var player1 = PLAYER_FACTORY.instance()
+	player1.position = player1Pos.position
+	add_child(player1)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+"
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 589.741, 10 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 23.7283, 408.057 )
+
+[node name="Arena" type="Node2D"]
+script = SubResource( 2 )
+
+[node name="Square" type="StaticBody2D" parent="."]
+editor/display_folded = true
+collision_layer = 4
+collision_mask = 0
+
+[node name="WallNorth" type="CollisionShape2D" parent="Square"]
+position = Vector2( 0, -400 )
+shape = SubResource( 1 )
+
+[node name="WallEast" type="CollisionShape2D" parent="Square"]
+position = Vector2( 600, 0 )
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="WallWest" type="CollisionShape2D" parent="Square"]
+position = Vector2( -600, 0 )
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="WallSouth" type="CollisionShape2D" parent="Square"]
+position = Vector2( 0, 400 )
+shape = SubResource( 1 )
+
+[node name="Player1" type="Position2D" parent="."]
+position = Vector2( -500, 0 )
+
+[node name="Player2" type="Position2D" parent="."]
+position = Vector2( 500, 0 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 1.2, 1.31 )
+
+[node name="Finisher" type="Area2D" parent="."]
+editor/display_folded = true
+position = Vector2( -580, 0 )
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Finisher"]
+shape = SubResource( 3 )
+
+[node name="Finisher2" type="Area2D" parent="."]
+editor/display_folded = true
+position = Vector2( 580, 0 )
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Finisher2"]
+shape = SubResource( 3 )

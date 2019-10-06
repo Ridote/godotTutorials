@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends KinematicBody2D
+
+class_name Player
+
+export(String, \"player1\", \"player2\") var player : String = \"player1\"
+export var defaultDimensions : Vector2 = Vector2(15, 80)
+
+onready var shape2D : CollisionShape2D = $CollisionShape2D
+
+func _ready():
+	print(player, defaultDimensions)
+	setSize(defaultDimensions)
+
+func setSize(size : Vector2 = defaultDimensions):
+	shape2D.shape.set_extents(Vector2(size.x, size.y))"
+
+[sub_resource type="RectangleShape2D" id=2]
+resource_local_to_scene = true
+extents = Vector2( 5, 5 )
+
+[node name="Bar" type="KinematicBody2D"]
+collision_mask = 4
+script = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
