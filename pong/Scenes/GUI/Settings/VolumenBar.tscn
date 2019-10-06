@@ -9,15 +9,58 @@ const FOCUS = {
 	sounds = \"sounds\", music = \"music\"
 }
 
+onready var volume : TextureProgress = $Volume
+
 # TODO
 # warning-ignore-all:unused_class_variable
-export var focus : Array = [FOCUS.sounds, FOCUS.music]
+
+export(String, \"sounds\", \"music\") var focus = FOCUS.sounds
 
 onready var volumeValue : TextureProgress = $Volume
 
-#has_focus
+func _ready():
+	if has_focus():
+		_on_focus()
+	else:
+		_on_defocus()
+	if connect(\"focus_entered\", self, \"_on_focus\"):
+		pass
+	if connect(\"focus_exited\", self, \"_on_defocus\"):
+		pass
+	match focus:
+		FOCUS.sounds:
+			if Settings.connect(\"soundVolumeChange\", self, \"_on_value_changed\"):
+				print(\"Error connecting soundVolumeChange in VolumeBar\")
+			volume.value = Settings.getSoundVolume()
+		FOCUS.music:
+			if Settings.connect(\"musicVolumeChange\", self, \"_on_value_changed\"):
+				print(\"Error connecting musicVolumeChange in VolumeBar\")
+			volume.value = Settings.getMusicVolume()
+
 func _input(event):
-	print(event)"
+	if has_focus() and event is InputEventKey:
+		if event.pressed:
+			match event.scancode:
+				KEY_LEFT:
+					match focus:
+						FOCUS.sounds:
+							Settings.soundVolume -= 1
+						FOCUS.music:
+							Settings.musicVolume -= 1
+				KEY_RIGHT:
+					match focus:
+						FOCUS.sounds:
+							Settings.soundVolume += 1
+						FOCUS.music:
+							Settings.musicVolume += 1
+
+func _on_defocus():
+	volume.modulate = Color(1,1,1,0.25)
+func _on_focus():
+	volume.modulate = Color(1,1,1,1)
+
+func _on_value_changed(new_value):
+	volume.value = new_value"
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
@@ -38,6 +81,7 @@ region = Rect2( 0, 0, 400, 64 )
 margin_top = 72.0
 margin_right = 959.0
 margin_bottom = 136.0
+focus_mode = 2
 script = SubResource( 1 )
 
 [node name="Margin" type="ColorRect" parent="."]

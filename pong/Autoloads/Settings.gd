@@ -3,8 +3,8 @@ extends Node
 signal soundVolumeChange(newValue)
 signal musicVolumeChange(newValue)
 
-var soundVolume : float setget setSoundVolume, getSoundVolume
-var musicVolume : float setget setMusicVolume, getMusicVolume
+var soundVolume : float = 50.0 setget setSoundVolume, getSoundVolume
+var musicVolume : float = 50.0 setget setMusicVolume, getMusicVolume
 
 func adjustVolume(volume : float) -> float:
 	if volume > 100:

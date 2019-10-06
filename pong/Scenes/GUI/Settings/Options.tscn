@@ -1,17 +1,38 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Fonts/Pixeled.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/GUI/Settings/VolumenBar.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends PanelContainer
+const MAIN_SCENE : String = \"res://Scenes/GUI/Main.tscn\"
+onready var soundsSettings : HBoxContainer = $HBoxContainer/CenterContainer/AudioSettings/SoundsSettings/VolumenBar
+onready var backButton : Button = $HBoxContainer/CenterContainer/AudioSettings/Back
+
+func _ready():
+	soundsSettings.grab_focus()
+	if backButton.connect(\"pressed\", self, \"_on_back\"):
+		pass
+
+func _on_back():
+	if(get_tree().change_scene(MAIN_SCENE)):
+		print(\"Error when trying to go to MAIN scene from options menu\")"
 
 [sub_resource type="DynamicFont" id=1]
 size = 24
 font_data = ExtResource( 1 )
 
+[sub_resource type="DynamicFont" id=2]
+size = 20
+font_data = ExtResource( 1 )
+
 [node name="Options" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+focus_neighbour_bottom = NodePath("HBoxContainer/CenterContainer/AudioSettings/SoundsSettings/VolumenBar")
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = SubResource( 3 )
 
 [node name="HBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 7.0
@@ -23,33 +44,81 @@ size_flags_vertical = 3
 
 [node name="CenterContainer" type="HBoxContainer" parent="HBoxContainer"]
 margin_right = 1010.0
-margin_bottom = 578.0
+margin_bottom = 562.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Margin" type="ColorRect" parent="HBoxContainer/CenterContainer"]
 margin_right = 47.0
-margin_bottom = 578.0
+margin_bottom = 562.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.05
 color = Color( 1, 1, 1, 0 )
 
-[node name="SoundSettings" type="VBoxContainer" parent="HBoxContainer/CenterContainer"]
+[node name="AudioSettings" type="VBoxContainer" parent="HBoxContainer/CenterContainer"]
 margin_left = 51.0
 margin_right = 1010.0
-margin_bottom = 578.0
+margin_bottom = 562.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="HBoxContainer/CenterContainer/SoundSettings"]
+[node name="Label" type="Label" parent="HBoxContainer/CenterContainer/AudioSettings"]
 margin_right = 959.0
 margin_bottom = 68.0
 custom_fonts/font = SubResource( 1 )
-text = "SOUND SETTINGS"
+text = "AUDIO SETTINGS"
 
-[node name="VolumenBar" parent="HBoxContainer/CenterContainer/SoundSettings" instance=ExtResource( 2 )]
+[node name="SoundsSettings" type="VBoxContainer" parent="HBoxContainer/CenterContainer/AudioSettings"]
+editor/display_folded = true
+margin_top = 72.0
+margin_right = 959.0
+margin_bottom = 196.0
 
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer"]
-margin_top = 582.0
+[node name="Label" type="Label" parent="HBoxContainer/CenterContainer/AudioSettings/SoundsSettings"]
+margin_right = 959.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 2 )
+text = "Sounds"
+
+[node name="VolumenBar" parent="HBoxContainer/CenterContainer/AudioSettings/SoundsSettings" instance=ExtResource( 2 )]
+margin_top = 60.0
+margin_bottom = 124.0
+focus_neighbour_bottom = NodePath("../../MusicSettings/VolumenBar")
+
+[node name="MusicSettings" type="VBoxContainer" parent="HBoxContainer/CenterContainer/AudioSettings"]
+editor/display_folded = true
+margin_top = 200.0
+margin_right = 959.0
+margin_bottom = 324.0
+
+[node name="Label" type="Label" parent="HBoxContainer/CenterContainer/AudioSettings/MusicSettings"]
+margin_right = 959.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 2 )
+text = "Music"
+
+[node name="VolumenBar" parent="HBoxContainer/CenterContainer/AudioSettings/MusicSettings" instance=ExtResource( 2 )]
+margin_top = 60.0
+margin_bottom = 124.0
+focus_neighbour_top = NodePath("../../SoundsSettings/VolumenBar")
+focus = "music"
+
+[node name="Aligned" type="VBoxContainer" parent="HBoxContainer/CenterContainer/AudioSettings"]
+margin_top = 328.0
+margin_right = 959.0
+margin_bottom = 538.0
+size_flags_vertical = 3
+
+[node name="Back" type="Button" parent="HBoxContainer/CenterContainer/AudioSettings"]
+margin_top = 542.0
+margin_right = 42.0
+margin_bottom = 562.0
+size_flags_horizontal = 0
+text = "Back"
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
+margin_top = 566.0
 margin_right = 1010.0
 margin_bottom = 586.0
+rect_min_size = Vector2( 0, 20 )
+color = Color( 1, 1, 1, 0 )

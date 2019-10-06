@@ -19,6 +19,10 @@ config/name="pong"
 run/main_scene="res://Scenes/GUI/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Settings="*res://Autoloads/Settings.gd"
+
 [debug]
 
 gdscript/warnings/treat_warnings_as_errors=true
