@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "# warning-ignore-all:return_value_discarded
+extends PanelContainer
+
+signal backToTitle
+
+onready var continueButton : Button = $CenterContainer/VBoxContainer/continue
+onready var backtotitleButton : Button = $CenterContainer/VBoxContainer/backtotitle
+onready var exitButton : Button = $CenterContainer/VBoxContainer/exit
+
+func _ready():
+	
+	continueButton.connect(\"pressed\", self, \"_on_continue\")
+	backtotitleButton.connect(\"pressed\", self, \"_on_back_to_title\")
+	exitButton.connect(\"pressed\", self, \"_on_exit\")
+
+func _on_continue():
+	visible = false
+	get_tree().paused = false
+
+func _on_back_to_title():
+	get_tree().paused = false
+	emit_signal(\"backToTitle\")
+func _on_exit():
+	get_tree().quit()"
+
+[node name="PauseMenu" type="PanelContainer"]
+self_modulate = Color( 1, 1, 1, 0.705882 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 1 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 593.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 459.0
+margin_top = 259.0
+margin_right = 550.0
+margin_bottom = 327.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="continue" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_right = 91.0
+margin_bottom = 20.0
+text = "Continue"
+
+[node name="backtotitle" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 24.0
+margin_right = 91.0
+margin_bottom = 44.0
+text = "Back to Title"
+
+[node name="exit" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 48.0
+margin_right = 91.0
+margin_bottom = 68.0
+text = "Exit Game"

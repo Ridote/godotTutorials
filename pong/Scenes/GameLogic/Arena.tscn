@@ -1,32 +1,52 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
-[sub_resource type="GDScript" id=2]
+[ext_resource path="res://Scenes/GUI/PauseMenu.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
-const PLAYER_FACTORY = preload(\"res://Scenes/GameLogic/Bar.tscn\")
+const MAIN_MENU : String = \"res://Scenes/GUI/Main.tscn\"
+const PLAYER_FACTORY : PackedScene = preload(\"res://Scenes/GameLogic/Bar.tscn\")
 
+onready var pauseMenu = $CanvasLayer/PauseMenu
 onready var player1Pos : Position2D = $Player1
 onready var player2Pos : Position2D = $Player2
 
 func _ready():
-	print(player2Pos)
+	pauseMenu.connect(\"backToTitle\", self, \"_on_back_to_title\")
+
 	var player1 = PLAYER_FACTORY.instance()
 	player1.position = player1Pos.position
 	add_child(player1)
+	
+	var player2 = PLAYER_FACTORY.instance()
+	player2.position = player2Pos.position
+	add_child(player2)
+	
+	match Settings.gameMode:
+		Settings.GAME_MODES.single:
+			player2.setPlayer(\"player2\")
+		Settings.GAME_MODES.duel:
+			player2.setPlayer(\"npc\")
+	
+func _input(event):
+	if event is InputEventKey:
+		if event.pressed and event.scancode == KEY_ESCAPE:
+			pauseMenu.visible = true
+			get_tree().paused = true
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-"
+func _on_back_to_title():
+	if get_tree().change_scene(MAIN_MENU):
+		print(\"Error transitioning from Arena to Main Menu\")"
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 589.741, 10 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 23.7283, 408.057 )
 
 [node name="Arena" type="Node2D"]
-script = SubResource( 2 )
+script = SubResource( 1 )
 
 [node name="Square" type="StaticBody2D" parent="."]
 editor/display_folded = true
@@ -35,21 +55,21 @@ collision_mask = 0
 
 [node name="WallNorth" type="CollisionShape2D" parent="Square"]
 position = Vector2( 0, -400 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="WallEast" type="CollisionShape2D" parent="Square"]
 position = Vector2( 600, 0 )
 rotation = 1.5708
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="WallWest" type="CollisionShape2D" parent="Square"]
 position = Vector2( -600, 0 )
 rotation = 1.5708
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="WallSouth" type="CollisionShape2D" parent="Square"]
 position = Vector2( 0, 400 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="Player1" type="Position2D" parent="."]
 position = Vector2( -500, 0 )
@@ -78,3 +98,9 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Finisher2"]
 shape = SubResource( 3 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+pause_mode = 2
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 1 )]
+visible = false

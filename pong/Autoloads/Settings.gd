@@ -1,10 +1,18 @@
+# warning-ignore-all:unused_class_variable
 extends Node
 
 signal soundVolumeChange(newValue)
 signal musicVolumeChange(newValue)
 
+const GAME_MODES = {
+	single = "Single",
+	duel = "Duel"
+}
+
 var soundVolume : float = 50.0 setget setSoundVolume, getSoundVolume
 var musicVolume : float = 50.0 setget setMusicVolume, getMusicVolume
+
+var gameMode : String = GAME_MODES.single
 
 func adjustVolume(volume : float) -> float:
 	if volume > 100:

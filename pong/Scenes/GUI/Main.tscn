@@ -9,23 +9,31 @@ font_data = ExtResource( 1 )
 default_font = SubResource( 1 )
 
 [sub_resource type="GDScript" id=3]
-script/source = "extends PanelContainer
+script/source = "# warning-ignore-all:return_value_discarded
+extends PanelContainer
 
-const OPTIONS_SCENE = \"res://Scenes/GUI/Settings/Options.tscn\"
-
-onready var start = $\"CenterContainer/VBoxContainer/StartGame\"
-onready var options = $\"CenterContainer/VBoxContainer/Options\"
-onready var exit = $\"CenterContainer/VBoxContainer/Exit\"
+const OPTIONS_SCENE : String = \"res://Scenes/GUI/Settings/Options.tscn\"
+const ARENA_SCENE : String = \"res://Scenes/GameLogic/Arena.tscn\"
+onready var start : Button = $\"CenterContainer/VBoxContainer/StartGame\"
+onready var duel : Button = $\"CenterContainer/VBoxContainer/Duel\"
+onready var options : Button = $\"CenterContainer/VBoxContainer/Options\"
+onready var exit : Button = $\"CenterContainer/VBoxContainer/Exit\"
 
 func _ready():
-	start.connect(\"pressed\", self, \"_on_start\")
+	start.connect(\"pressed\", self, \"_on_start\", [false])
+	duel.connect(\"pressed\", self, \"_on_start\", [true])
 	options.connect(\"pressed\", self, \"_on_options\")
 	exit.connect(\"pressed\", self, \"_on_exit\")
 	start.grab_focus()
-func _on_start():
-	if(get_tree().change_scene(OPTIONS_SCENE)):
-		print(\"Error when trying to start the game\")
+	
+func _on_start(duel):
+	if duel:
+		Settings.gameMode = Settings.GAME_MODES.single
+	else:
+		Settings.gameMode = Settings.GAME_MODES.duel
 
+	get_tree().change_scene(ARENA_SCENE)
+	
 func _on_options():
 	if(get_tree().change_scene(OPTIONS_SCENE)):
 		print(\"Error when trying to go to options menu from the main menu\")
@@ -49,23 +57,29 @@ margin_bottom = 593.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 margin_left = 422.0
-margin_top = 211.0
+margin_top = 183.0
 margin_right = 587.0
-margin_bottom = 375.0
+margin_bottom = 403.0
 
 [node name="StartGame" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_right = 165.0
 margin_bottom = 52.0
 text = "Start Game"
 
-[node name="Options" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="Duel" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_top = 56.0
 margin_right = 165.0
 margin_bottom = 108.0
-text = "Options"
+text = "Duel"
 
-[node name="Exit" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="Options" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_top = 112.0
 margin_right = 165.0
 margin_bottom = 164.0
+text = "Options"
+
+[node name="Exit" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 168.0
+margin_right = 165.0
+margin_bottom = 220.0
 text = "Exit"

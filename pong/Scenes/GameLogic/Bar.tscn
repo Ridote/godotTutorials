@@ -5,14 +5,43 @@ script/source = "extends KinematicBody2D
 
 class_name Player
 
-export(String, \"player1\", \"player2\") var player : String = \"player1\"
+const speed : float = 500.0
+
+export(String, \"player1\", \"player2\", \"npc\") var player : String = \"player1\"
 export var defaultDimensions : Vector2 = Vector2(15, 80)
 
 onready var shape2D : CollisionShape2D = $CollisionShape2D
 
 func _ready():
-	print(player, defaultDimensions)
 	setSize(defaultDimensions)
+
+func _draw():
+	draw_rect(Rect2(Vector2(-shape2D.shape.extents.x, -shape2D.shape.extents.y), shape2D.shape.extents*2), Color(1.0,0.0,0.0,1.0), true)
+
+func _physics_process(delta):
+	match player:
+		\"player1\":
+			if(Input.is_action_pressed(\"player1_up\")):
+				if move_and_collide(Vector2(0.0,-speed)*delta, false):
+					pass
+			if(Input.is_action_pressed(\"player1_down\")):
+				if move_and_collide(Vector2(0.0,speed)*delta, false):
+					pass
+		\"player2\":
+			if(Input.is_action_pressed(\"player2_up\")):
+				if move_and_collide(Vector2(0.0,-speed)*delta, false):
+					pass
+			if(Input.is_action_pressed(\"player2_down\")):
+				if move_and_collide(Vector2(0.0,speed)*delta, false):
+					pass
+		\"npc\":
+			# TODO
+			pass
+
+func setPlayer(playerType : String):
+	player = playerType
+	if(not [\"player1\", \"player2\", \"npc\"].has(playerType)):
+		print(\"Error: Unrecognised player \" + playerType)
 
 func setSize(size : Vector2 = defaultDimensions):
 	shape2D.shape.set_extents(Vector2(size.x, size.y))"

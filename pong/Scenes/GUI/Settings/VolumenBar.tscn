@@ -9,6 +9,8 @@ const FOCUS = {
 	sounds = \"sounds\", music = \"music\"
 }
 
+const VOLUME_INCREASE : float = 1.5
+
 onready var volume : TextureProgress = $Volume
 
 # TODO
@@ -37,22 +39,37 @@ func _ready():
 				print(\"Error connecting musicVolumeChange in VolumeBar\")
 			volume.value = Settings.getMusicVolume()
 
+func _process(_delta):
+	if has_focus():
+		if Input.is_action_pressed(\"ui_left\"):
+			match focus:
+				FOCUS.sounds:
+					Settings.soundVolume -= VOLUME_INCREASE
+				FOCUS.music:
+					Settings.musicVolume -= VOLUME_INCREASE
+		if Input.is_action_pressed(\"ui_right\"):
+			match focus:
+				FOCUS.sounds:
+					Settings.soundVolume += VOLUME_INCREASE
+				FOCUS.music:
+					Settings.musicVolume += VOLUME_INCREASE
+\"\"\"
 func _input(event):
 	if has_focus() and event is InputEventKey:
 		if event.pressed:
-			match event.scancode:
-				KEY_LEFT:
-					match focus:
+			if event.is_action_pressed(\"ui_left\"):
+				match focus:
 						FOCUS.sounds:
-							Settings.soundVolume -= 1
+							Settings.soundVolume -= VOLUME_INCREASE
 						FOCUS.music:
-							Settings.musicVolume -= 1
-				KEY_RIGHT:
-					match focus:
+							Settings.musicVolume -= VOLUME_INCREASE
+			if event.is_action_pressed(\"ui_right\"):
+				match focus:
 						FOCUS.sounds:
-							Settings.soundVolume += 1
+							Settings.soundVolume += VOLUME_INCREASE
 						FOCUS.music:
-							Settings.musicVolume += 1
+							Settings.musicVolume += VOLUME_INCREASE
+\"\"\"
 
 func _on_defocus():
 	volume.modulate = Color(1,1,1,0.25)
@@ -97,6 +114,7 @@ margin_right = 911.0
 margin_bottom = 64.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+step = 0.1
 value = 100.0
 texture_under = SubResource( 2 )
 texture_over = SubResource( 3 )

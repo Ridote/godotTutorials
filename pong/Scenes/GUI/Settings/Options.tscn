@@ -3,10 +3,10 @@
 [ext_resource path="res://Assets/Fonts/Pixeled.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/GUI/Settings/VolumenBar.tscn" type="PackedScene" id=2]
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=1]
 script/source = "extends PanelContainer
 const MAIN_SCENE : String = \"res://Scenes/GUI/Main.tscn\"
-onready var soundsSettings : HBoxContainer = $HBoxContainer/CenterContainer/AudioSettings/SoundsSettings/VolumenBar
+onready var soundsSettings : HBoxContainer = $HBoxContainer/CenterContainer/AudioSettings/SoundsSettings/SoundsVolumenBar
 onready var backButton : Button = $HBoxContainer/CenterContainer/AudioSettings/Back
 
 func _ready():
@@ -18,11 +18,11 @@ func _on_back():
 	if(get_tree().change_scene(MAIN_SCENE)):
 		print(\"Error when trying to go to MAIN scene from options menu\")"
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 24
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 20
 font_data = ExtResource( 1 )
 
@@ -32,7 +32,7 @@ anchor_bottom = 1.0
 focus_neighbour_bottom = NodePath("HBoxContainer/CenterContainer/AudioSettings/SoundsSettings/VolumenBar")
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = SubResource( 3 )
+script = SubResource( 1 )
 
 [node name="HBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 7.0
@@ -65,11 +65,10 @@ size_flags_vertical = 3
 [node name="Label" type="Label" parent="HBoxContainer/CenterContainer/AudioSettings"]
 margin_right = 959.0
 margin_bottom = 68.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "AUDIO SETTINGS"
 
 [node name="SoundsSettings" type="VBoxContainer" parent="HBoxContainer/CenterContainer/AudioSettings"]
-editor/display_folded = true
 margin_top = 72.0
 margin_right = 959.0
 margin_bottom = 196.0
@@ -77,16 +76,15 @@ margin_bottom = 196.0
 [node name="Label" type="Label" parent="HBoxContainer/CenterContainer/AudioSettings/SoundsSettings"]
 margin_right = 959.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Sounds"
 
-[node name="VolumenBar" parent="HBoxContainer/CenterContainer/AudioSettings/SoundsSettings" instance=ExtResource( 2 )]
+[node name="SoundsVolumenBar" parent="HBoxContainer/CenterContainer/AudioSettings/SoundsSettings" instance=ExtResource( 2 )]
 margin_top = 60.0
 margin_bottom = 124.0
-focus_neighbour_bottom = NodePath("../../MusicSettings/VolumenBar")
+focus_neighbour_bottom = NodePath("../../MusicSettings/MusicVolumenBar")
 
 [node name="MusicSettings" type="VBoxContainer" parent="HBoxContainer/CenterContainer/AudioSettings"]
-editor/display_folded = true
 margin_top = 200.0
 margin_right = 959.0
 margin_bottom = 324.0
@@ -94,13 +92,14 @@ margin_bottom = 324.0
 [node name="Label" type="Label" parent="HBoxContainer/CenterContainer/AudioSettings/MusicSettings"]
 margin_right = 959.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Music"
 
-[node name="VolumenBar" parent="HBoxContainer/CenterContainer/AudioSettings/MusicSettings" instance=ExtResource( 2 )]
+[node name="MusicVolumenBar" parent="HBoxContainer/CenterContainer/AudioSettings/MusicSettings" instance=ExtResource( 2 )]
 margin_top = 60.0
 margin_bottom = 124.0
-focus_neighbour_top = NodePath("../../SoundsSettings/VolumenBar")
+focus_neighbour_top = NodePath("../../SoundsSettings/SoundsVolumenBar")
+focus_neighbour_bottom = NodePath("../../Back")
 focus = "music"
 
 [node name="Aligned" type="VBoxContainer" parent="HBoxContainer/CenterContainer/AudioSettings"]
@@ -113,6 +112,7 @@ size_flags_vertical = 3
 margin_top = 542.0
 margin_right = 42.0
 margin_bottom = 562.0
+focus_neighbour_top = NodePath("../MusicSettings/MusicVolumenBar")
 size_flags_horizontal = 0
 text = "Back"
 
