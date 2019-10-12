@@ -3,16 +3,46 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+const verticalDistance : float = 410.0
+const horizontalDistance : float = 630.0
+const long : float = 700.0
+const wide : float = 20.0
+
 func _ready():
-	var northWall = StaticBody2D.new()
-	var collisionShape = CollisionShape2D.new()
+	var northWall	= createWall(long, wide, Vector2(0.0,-verticalDistance),	0.0,	\"NorthWall\")
+	var southWall	= createWall(long, wide, Vector2(0.0, verticalDistance),	0.0,	\"SouthWall\")
+	var westWall	= createWall(long, wide, Vector2(-horizontalDistance,0.0),	PI/2.0,	\"WestWall\", true)
+	var eastWall	= createWall(long, wide, Vector2( horizontalDistance,0.0),	PI/2.0,	\"EastWall\", true)
+	
+	add_child(northWall)
+	add_child(southWall)
+	add_child(eastWall)
+	add_child(westWall)
+	
+func createWall(width : float, height : float, position : Vector2, rotation : float, name : String = \"Wall\", ender : bool = false) -> StaticBody2D:
+	# Create a new Shape
 	var shape = RectangleShape2D.new()
-	shape.set_extents(Vector2(500, 50))
-	collisionShape.set_shape(shape)
+	shape.set_extents(Vector2(width, height))
 	
+	# Create a new collisionShape
+	var collision_shape = CollisionShape2D.new()
+	# Add the shape we created before to this collision shape
+	collision_shape.set_shape(shape)
 	
-	#northWall.add_child(shape)
-	add_child(northWall)"
+	collision_shape.set_rotation(rotation)
+	
+	# Create the StaticBody2D
+	var static_body = StaticBody2D.new()
+	# Add the CollisionShape we've created as child of the StaticBody
+	static_body.add_child(collision_shape)
+	
+	static_body.set_position(position)
+	# Add the StaticBody as a child of the StaticBody
+	static_body.name = name
+	static_body.add_to_group(Groups.G_WALL)
+	if ender:
+		static_body.add_to_group(Groups.G_ENDER)
+	return static_body"
 
 [node name="Square" type="Node2D"]
 script = SubResource( 1 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scenes/GameLogic/Square.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/GUI/PauseMenu.tscn" type="PackedScene" id=2]
@@ -19,6 +19,7 @@ func _ready():
 
 	var player1 = PLAYER_FACTORY.instance()
 	player1.position = player1Pos.position
+	player1.name = \"Player1\"
 	add_child(player1)
 	
 	var player2 = PLAYER_FACTORY.instance()
@@ -28,10 +29,13 @@ func _ready():
 	match Settings.gameMode:
 		Settings.GAME_MODES.single:
 			player2.setPlayer(\"player2\")
+			player2.name = \"Player1\"
 		Settings.GAME_MODES.duel:
 			player2.setPlayer(\"npc\")
+			player2.name = \"NPC\"
 	
 	var ball = BALL_FACTORY.instance()
+	ball.name = \"Ball\"
 	add_child(ball)
 	
 func _input(event):
@@ -43,9 +47,6 @@ func _input(event):
 func _on_back_to_title():
 	if get_tree().change_scene(MAIN_MENU):
 		print(\"Error transitioning from Arena to Main Menu\")"
-
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 23.7283, 408.057 )
 
 [node name="Arena" type="Node2D"]
 script = SubResource( 1 )
@@ -61,24 +62,6 @@ position = Vector2( 500, 0 )
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 1.2, 1.31 )
-
-[node name="Finisher" type="Area2D" parent="."]
-editor/display_folded = true
-position = Vector2( -580, 0 )
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Finisher"]
-shape = SubResource( 3 )
-
-[node name="Finisher2" type="Area2D" parent="."]
-editor/display_folded = true
-position = Vector2( 580, 0 )
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Finisher2"]
-shape = SubResource( 3 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 pause_mode = 2
