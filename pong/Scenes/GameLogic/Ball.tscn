@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends KinematicBody2D
+
+const defaultRadius : float = 18.0
+export var radius : float = defaultRadius
+
+var direction : Vector2 = Vector2(1.0,0.0)
+var speed : float = 150.0
+
+func _ready():
+	add_to_group(Groups.G_BALL)
+	setRadius()
+
+func _draw():
+	draw_circle(Vector2(0.0,0.0), radius, Color(0.0,0.0,1.0,1.0))
+
+func setRadius(radius : float = defaultRadius):
+	$CollisionShape2D.shape.radius = radius
+
+func _physics_process(delta):
+	var colliders = move_and_collide(direction*speed*delta, false)
+	if colliders:
+		print(colliders)"
+
+[sub_resource type="CircleShape2D" id=2]
+
+[node name="Ball" type="KinematicBody2D"]
+script = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )

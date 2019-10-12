@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+func _ready():
+	var northWall = StaticBody2D.new()
+	var collisionShape = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	shape.set_extents(Vector2(500, 50))
+	collisionShape.set_shape(shape)
+	
+	
+	#northWall.add_child(shape)
+	add_child(northWall)"
+
+[node name="Square" type="Node2D"]
+script = SubResource( 1 )

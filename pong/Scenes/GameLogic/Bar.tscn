@@ -13,7 +13,8 @@ export var defaultDimensions : Vector2 = Vector2(15, 80)
 onready var shape2D : CollisionShape2D = $CollisionShape2D
 
 func _ready():
-	setSize(defaultDimensions)
+	add_to_group(Groups.G_BAR)
+	setSize()
 
 func _draw():
 	draw_rect(Rect2(Vector2(-shape2D.shape.extents.x, -shape2D.shape.extents.y), shape2D.shape.extents*2), Color(1.0,0.0,0.0,1.0), true)

@@ -22,6 +22,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Settings="*res://Autoloads/Settings.gd"
+Groups="*res://Autoloads/Groups.gd"
 
 [debug]
 
