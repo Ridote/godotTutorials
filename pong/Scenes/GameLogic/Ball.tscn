@@ -3,6 +3,8 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends KinematicBody2D
 
+signal scored(player)
+
 const defaultRadius : float = 18.0
 export var radius : float = defaultRadius
 
@@ -12,6 +14,8 @@ var speed : float = 150.0
 func _ready():
 	add_to_group(Groups.G_BALL)
 	setRadius()
+	if $Timer.connect(\"timeout\", self, \"_on_increase_speed\"):
+		print(\"Error connecting timeout signal in Ball's timer\")
 
 func _draw():
 	draw_circle(Vector2(0.0,0.0), radius, Color(0.0,0.0,1.0,1.0))
@@ -19,11 +23,27 @@ func _draw():
 func setRadius(radius : float = defaultRadius):
 	$CollisionShape2D.shape.radius = radius
 
+func setInitialDirection(initialDirection : Vector2 = Vector2(1.0,0.0)):
+	direction = initialDirection.normalized()
+
 func _physics_process(delta):
-	var collisions = move_and_collide(direction*speed*delta, false)
-	if collisions:
-		print(collisions.get_collider().name)
-		"
+	var collision = move_and_collide(direction*speed*delta, false)
+	if collision:
+		var collider = collision.get_collider()
+		# Collision with player/npc
+		if(collider.is_in_group(Groups.G_BAR)):
+			direction = (global_position - collider.global_position).normalized()
+		elif(collider.is_in_group(Groups.G_WALL)):
+			if(collider.is_in_group(Groups.G_ENDER)):
+				emit_signal(\"scored\")
+				queue_free()
+			elif(collider.is_in_group(Groups.G_SIDE_WALL)):
+				direction.x *= -1
+			elif(collider.is_in_group(Groups.G_UP_DOWN_WALL)):
+				direction.y *= -1
+
+func _on_increase_speed():
+	speed += 20"
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -32,3 +52,6 @@ script = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true

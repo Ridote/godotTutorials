@@ -42,6 +42,9 @@ func createWall(width : float, height : float, position : Vector2, rotation : fl
 	static_body.add_to_group(Groups.G_WALL)
 	if ender:
 		static_body.add_to_group(Groups.G_ENDER)
+		static_body.add_to_group(Groups.G_SIDE_WALL)
+	else:
+		static_body.add_to_group(Groups.G_UP_DOWN_WALL)
 	return static_body"
 
 [node name="Square" type="Node2D"]

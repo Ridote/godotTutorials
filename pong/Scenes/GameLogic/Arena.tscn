@@ -16,7 +16,7 @@ onready var player2Pos : Position2D = $Player2
 
 func _ready():
 	pauseMenu.connect(\"backToTitle\", self, \"_on_back_to_title\")
-
+	
 	var player1 = PLAYER_FACTORY.instance()
 	player1.position = player1Pos.position
 	player1.name = \"Player1\"
@@ -36,6 +36,7 @@ func _ready():
 	
 	var ball = BALL_FACTORY.instance()
 	ball.name = \"Ball\"
+	ball.connect(\"scored\", self, \"_on_scored_point\")
 	add_child(ball)
 	
 func _input(event):
@@ -46,7 +47,14 @@ func _input(event):
 
 func _on_back_to_title():
 	if get_tree().change_scene(MAIN_MENU):
-		print(\"Error transitioning from Arena to Main Menu\")"
+		print(\"Error transitioning from Arena to Main Menu\")
+
+func _on_scored_point():
+	var ball = BALL_FACTORY.instance()
+	ball.name = \"Ball\"
+	ball.setInitialDirection(Vector2(-1.0, 0.0))
+	ball.connect(\"scored\", self, \"_on_scored_point\")
+	add_child(ball)"
 
 [node name="Arena" type="Node2D"]
 script = SubResource( 1 )
