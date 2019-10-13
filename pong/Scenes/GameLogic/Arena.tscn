@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/GameLogic/Square.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/GUI/PauseMenu.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/GUI/PointsHUD.tscn" type="PackedScene" id=3]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -46,13 +47,21 @@ func _input(event):
 			get_tree().paused = true
 
 func _on_back_to_title():
+	PointsManager.resetPoints()
 	if get_tree().change_scene(MAIN_MENU):
 		print(\"Error transitioning from Arena to Main Menu\")
 
-func _on_scored_point():
+func _on_scored_point(player : String):
+	var newDirection = Vector2(0.0, 0.0)
+	if player == \"player1\":
+		newDirection = Vector2(1.0, 0.0)
+	elif(player == \"player2\"):
+		newDirection = Vector2(-1.0, 0.0)
+	PointsManager.addPoint(player)
+	
 	var ball = BALL_FACTORY.instance()
 	ball.name = \"Ball\"
-	ball.setInitialDirection(Vector2(-1.0, 0.0))
+	ball.setInitialDirection(newDirection)
 	ball.connect(\"scored\", self, \"_on_scored_point\")
 	add_child(ball)"
 
@@ -77,3 +86,7 @@ editor/display_folded = true
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 2 )]
 visible = false
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="PointsHUD" parent="CanvasLayer2" instance=ExtResource( 3 )]

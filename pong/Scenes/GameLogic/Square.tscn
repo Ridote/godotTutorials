@@ -43,6 +43,10 @@ func createWall(width : float, height : float, position : Vector2, rotation : fl
 	if ender:
 		static_body.add_to_group(Groups.G_ENDER)
 		static_body.add_to_group(Groups.G_SIDE_WALL)
+		if name == \"WestWall\":
+			static_body.add_to_group(Groups.G_PLAYER1_GOAL)
+		elif name == \"EastWall\":
+			static_body.add_to_group(Groups.G_PLAYER2_GOAL)
 	else:
 		static_body.add_to_group(Groups.G_UP_DOWN_WALL)
 	return static_body"

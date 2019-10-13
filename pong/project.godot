@@ -23,6 +23,7 @@ config/icon="res://icon.png"
 
 Settings="*res://Autoloads/Settings.gd"
 Groups="*res://Autoloads/Groups.gd"
+PointsManager="*res://Autoloads/PointsManager.gd"
 
 [debug]
 

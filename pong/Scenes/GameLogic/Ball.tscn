@@ -35,7 +35,12 @@ func _physics_process(delta):
 			direction = (global_position - collider.global_position).normalized()
 		elif(collider.is_in_group(Groups.G_WALL)):
 			if(collider.is_in_group(Groups.G_ENDER)):
-				emit_signal(\"scored\")
+				if(collider.is_in_group(Groups.G_PLAYER1_GOAL)):
+					emit_signal(\"scored\", \"player1\")
+				elif(collider.is_in_group(Groups.G_PLAYER2_GOAL)):
+					emit_signal(\"scored\", \"player2\")
+				else:
+					print(\"Error, wall doesn't belong to any player\")
 				queue_free()
 			elif(collider.is_in_group(Groups.G_SIDE_WALL)):
 				direction.x *= -1

@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends VBoxContainer
+
+onready var player1 : Label = $HBoxContainer/Player1
+onready var player2 : Label = $HBoxContainer/Player2
+
+func _ready():
+	if PointsManager.connect(\"onPointsChanged\", self, \"_on_points_changed\"):
+		print(\"Error connecting points HUD to point manager\")
+
+func _on_points_changed(newPoints : Vector2):
+	player1.text = str(newPoints[0])
+	player2.text = str(newPoints[1])"
+
+[node name="PointsHUD" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 1024.0
+margin_bottom = 11.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.02
+color = Color( 1, 1, 1, 0 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 15.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Player1" type="Label" parent="HBoxContainer"]
+margin_right = 338.0
+margin_bottom = 585.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "0"
+align = 2
+
+[node name="Separator" type="Label" parent="HBoxContainer"]
+margin_left = 342.0
+margin_right = 680.0
+margin_bottom = 585.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "-"
+align = 1
+
+[node name="Player2" type="Label" parent="HBoxContainer"]
+margin_left = 684.0
+margin_right = 1024.0
+margin_bottom = 585.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "0"
