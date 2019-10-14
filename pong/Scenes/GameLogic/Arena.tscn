@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/GameLogic/Square.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/GUI/PauseMenu.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scenes/GUI/PointsHUD.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/GUI/PointsHUD.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/GUI/PauseMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Audio/SwingingSweet.ogg" type="AudioStream" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -82,11 +83,13 @@ zoom = Vector2( 1.2, 1.31 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 pause_mode = 2
-editor/display_folded = true
 
-[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 2 )]
+[node name="PointsHUD" parent="CanvasLayer" instance=ExtResource( 2 )]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 3 )]
 visible = false
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
-
-[node name="PointsHUD" parent="CanvasLayer2" instance=ExtResource( 3 )]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true
+bus = "Music"
